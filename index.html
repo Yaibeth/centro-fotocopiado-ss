@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora - Centro Fotocopiado SS</title>
+    
+    <!-- Carga de Tailwind CSS para los estilos -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fuentes de Google -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Carga de React y Babel para que funcione en un solo archivo -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <!-- Script principal de la Aplicación -->
+    <script type="text/babel" data-type="module">
+        import React, { useState, useRef, useEffect } from 'https://esm.sh/react@18';
+        import { createRoot } from 'https://esm.sh/react-dom@18/client';
+        import { Printer, Calculator, Camera, FileText, Layers, ShieldCheck, MessageCircle, Smartphone, Upload, X, HardDrive, Music, Video, Database, Package, Settings, Monitor, Wrench } from 'https://esm.sh/lucide-react@0.292.0';
+
+        const App = () => {
+          // Tasa del BCV con memoria local (localStorage)
+          const [bcvRate, setBcvRate] = useState(() => {
+            const savedRate = localStorage.getItem('centro_ss_bcvRate');
+            return savedRate ? parseFloat(savedRate) : 363.66;
+          });
+
+          // Guardar la tasa cada vez que cambie
+          useEffect(() => {
+            localStorage.setItem('centro_ss_bcvRate', bcvRate.toString());
+          }, [bcvRate]);
+          
+          // Estados para Imágenes Personalizadas
+          const [logoImage, setLogoImage] = useState(null);
+          const [qrImage, setQrImage] = useState(null);
+          
+          // Referencias para los inputs
+          const logoInputRef = useRef(null);
+          const qrInputRef = useRef(null);
+
+          // Datos de contacto
+          const contactInfo = {
+            phone: "+58 412-1969318",
+            link: "https://bit.ly/Centro_Fotocopiado_SS"
+          };
+
+          // QR por defecto
+          const defaultQrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(contactInfo.link)}&color=2B7FFF`;
+
+          // Lista de servicios completa y consolidada
+          const [services] = useState([
+            // IMPRESIONES B/N
+            { id: 1, name: 'Copia / Impresión B/N (Carta)', usd: 0.15, icon: <FileText size={20} />, category: 'Impresiones' },
+            { id: 20, name: 'Copia / Impresión B/N (Oficio)', usd: 0.20, icon: <FileText size={20} />, category: 'Impresiones' },
+            
+            // IMPRESIONES COLOR MEDIO
+            { id: 2, name: 'Copia / Impresión Color (Carta)', usd: 0.25, icon: <FileText className="text-blue-500" size={20} />, category: 'Impresiones' },
+            { id: 21, name: 'Copia / Impresión Color (Oficio)', usd: 0.30, icon: <FileText className="text-blue-500" size={20} />, category: 'Impresiones' },
+            
+            // IMPRESIONES FULL COLOR
+            { id: 4, name: 'Impresión Color Full (Carta)', usd: 0.50, icon: <Layers className="text-blue-600" size={20} />, category: 'Impresiones' },
+            { id: 22, name: 'Impresión Color Full (Oficio)', usd: 0.60, icon: <Layers className="text-blue-600" size={20} />, category: 'Impresiones' },
+            
+            // ESPECIALES
+            { id: 5, name: 'Fondo Negro (Papel Fotográfico)', usd: 2.00, icon: <FileText className="text-gray-900" size={20} />, category: 'Especiales' },
+            { id: 6, name: '8 Fotos Tipo Carnet', usd: 3.00, icon: <Camera className="text-blue-600" size={20} />, category: 'Especiales' },
+            { id: 14, name: 'Foto Tamaño Carta (Papel Foto)', usd: 2.00, icon: <Camera className="text-purple-600" size={20} />, category: 'Especiales' },
+            
+            // PLASTIFICADOS
+            { id: 7, name: 'Plastificado Carnet / Cédula', usd: 0.50, icon: <ShieldCheck size={20} />, category: 'Plastificados' },
+            { id: 8, name: 'Plastificado Carta', usd: 1.50, icon: <ShieldCheck size={20} />, category: 'Plastificados' },
+            { id: 9, name: 'Plastificado Oficio', usd: 2.00, icon: <ShieldCheck size={20} />, category: 'Plastificados' },
+            
+            // SERVICIOS INFORMÁTICOS (Soporte Técnico)
+            { id: 25, name: 'Formateo Básico (Sin respaldo)', usd: 15.00, icon: <Monitor className="text-indigo-500" size={20} />, category: 'Servicios Informáticos' },
+            { id: 26, name: 'Formateo Completo (Con respaldo)', usd: 25.00, icon: <Monitor className="text-indigo-600" size={20} />, category: 'Servicios Informáticos' },
+            { id: 10, name: 'Recuperación Datos (Hasta 32GB)', usd: 5.00, icon: <HardDrive className="text-orange-400" size={20} />, category: 'Servicios Informáticos' },
+            { id: 12, name: 'Recuperación Datos (Disco Duro)', usd: 15.00, icon: <HardDrive className="text-orange-600" size={20} />, category: 'Servicios Informáticos' },
+            { id: 27, name: 'Optimización / PC Lenta', usd: 10.00, icon: <Settings className="text-gray-600" size={20} />, category: 'Servicios Informáticos' },
+            { id: 28, name: 'Limpieza de Virus + Antivirus', usd: 10.00, icon: <ShieldCheck className="text-red-500" size={20} />, category: 'Servicios Informáticos' },
+            { id: 29, name: 'Instalación Programas (Office/Diseño)', usd: 5.00, icon: <Wrench className="text-gray-700" size={20} />, category: 'Servicios Informáticos' },
+            { id: 30, name: 'Configuración Impresora / Drivers', usd: 5.00, icon: <Printer className="text-gray-600" size={20} />, category: 'Servicios Informáticos' },
+            { id: 23, name: 'Activación Windows / Licencias', usd: 5.00, icon: <Settings className="text-gray-500" size={20} />, category: 'Servicios Informáticos' },
+            { id: 31, name: 'Revisión / Otro problema Software', usd: 5.00, icon: <Wrench className="text-gray-400" size={20} />, category: 'Servicios Informáticos' },
+
+            // DESCARGAS
+            { id: 15, name: 'Descarga de Canción (MP3)', usd: 0.10, icon: <Music className="text-indigo-500" size={20} />, category: 'Descargas Digitales' },
+            { id: 16, name: 'Descarga de Video (MP4)', usd: 0.20, icon: <Video className="text-indigo-500" size={20} />, category: 'Descargas Digitales' },
+            { id: 17, name: 'Llenado de Memoria (Por 1 GB)', usd: 1.00, icon: <Database className="text-indigo-600" size={20} />, category: 'Descargas Digitales' },
+
+            // PAPELERÍA Y ARTÍCULOS
+            { id: 18, name: 'Funda Protectora (Unidad)', usd: 0.30, icon: <Package className="text-teal-500" size={20} />, category: 'Papelería y Artículos' },
+            { id: 19, name: 'Funda Protectora (Promo 2x)', usd: 0.50, icon: <Package className="text-teal-600" size={20} />, category: 'Papelería y Artículos' },
+          ]);
+
+          const calculateBs = (usd) => {
+            const raw = usd * bcvRate;
+            return Math.ceil(raw / 5) * 5;
+          };
+
+          const handlePrint = () => {
+            setTimeout(() => {
+              window.print();
+            }, 100);
+          };
+
+          const formatCurrency = (value) => {
+            return new Intl.NumberFormat('es-VE', {
+              style: 'currency',
+              currency: 'VES',
+              minimumFractionDigits: 2,
+            }).format(value);
+          };
+
+          const handleImageUpload = (e, type) => {
+            const file = e.target.files[0];
+            if (file) {
+              const imageUrl = URL.createObjectURL(file);
+              if (type === 'logo') setLogoImage(imageUrl);
+              if (type === 'qr') setQrImage(imageUrl);
+            }
+          };
+
+          return (
+            <div className="min-h-screen bg-gray-100 p-4 md:p-8 font-sans">
+              <style>
+                {`
+                  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+                  body { font-family: 'Inter', sans-serif; }
+                  .bg-brand-blue { background-color: #2B7FFF; }
+                  .text-brand-blue { color: #2B7FFF; }
+                  .border-brand-blue { border-color: #2B7FFF; }
+                  
+                  @media print {
+                    .no-print { display: none !important; }
+                    body { 
+                      background-color: white !important; 
+                      padding: 0 !important; 
+                      margin: 0 !important;
+                      -webkit-print-color-adjust: exact !important;
+                      print-color-adjust: exact !important;
+                    }
+                    #printable-poster { 
+                      width: 100% !important; 
+                      max-width: none !important; 
+                      box-shadow: none !important; 
+                      margin: 0 !important; 
+                      border: none !important; 
+                      border-radius: 0 !important;
+                      position: absolute;
+                      top: 0;
+                      left: 0;
+                    }
+                    @page { margin: 0; size: auto; }
+                  }
+                `}
+              </style>
+
+              {/* INPUTS OCULTOS */}
+              <input type="file" ref={logoInputRef} className="hidden" accept="image/*" onChange={(e) => handleImageUpload(e, 'logo')} />
+              <input type="file" ref={qrInputRef} className="hidden" accept="image/*" onChange={(e) => handleImageUpload(e, 'qr')} />
+
+              {/* PANEL DE CONTROL */}
+              <div className="max-w-4xl mx-auto space-y-6 mb-8 no-print">
+                <div className="bg-white rounded-xl shadow-md p-6 border-t-4 border-brand-blue">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                    <div className="flex items-center gap-4">
+                      <div className="bg-brand-blue/10 p-3 rounded-full">
+                        <Calculator className="text-brand-blue" />
+                      </div>
+                      <div>
+                        <h2 className="text-xl font-black text-gray-800 uppercase tracking-tight">Centro Fotocopiado SS</h2>
+                        <p className="text-sm text-gray-500 font-medium">Panel de Gestión de Precios</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex flex-wrap items-center gap-4 bg-gray-50 p-4 rounded-xl border border-gray-100">
+                      <div className="flex flex-col">
+                        <span className="text-[10px] font-bold text-gray-400 uppercase ml-1 mb-1">Tasa del día</span>
+                        <div className="relative">
+                          <span className="absolute left-3 top-2 text-gray-400 font-bold">Bs.</span>
+                          <input 
+                            type="number" step="0.01" value={bcvRate}
+                            onChange={(e) => setBcvRate(parseFloat(e.target.value) || 0)}
+                            className="pl-10 pr-4 py-2 border-2 border-gray-200 rounded-lg focus:border-brand-blue outline-none w-36 font-black text-brand-blue text-lg"
+                          />
+                        </div>
+                      </div>
+                      <button onClick={handlePrint} className="flex items-center gap-2 bg-brand-blue hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-lg shadow-lg active:scale-95 transition-all">
+                        <Printer size={20} />
+                        IMPRIMIR
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* CARTEL PRINCIPAL */}
+              <div id="printable-poster" className="max-w-4xl mx-auto bg-white shadow-2xl overflow-hidden rounded-3xl border border-gray-100 flex flex-col">
+                
+                {/* ENCABEZADO */}
+                <div className="bg-brand-blue text-white p-8 md:p-10 text-center relative overflow-hidden flex-shrink-0">
+                  <div className="absolute top-0 right-0 w-80 h-80 bg-white/10 rounded-full -mr-32 -mt-32 blur-3xl"></div>
+                  <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-400/20 rounded-full -ml-20 -mb-20 blur-2xl"></div>
+                  
+                  <div className="relative z-10 flex flex-col items-center">
+                    {/* LOGO AREA */}
+                    <div 
+                      className="flex justify-center mb-6 cursor-pointer group relative"
+                      onClick={() => logoInputRef.current.click()}
+                      title="Clic para cambiar logo"
+                    >
+                       {logoImage ? (
+                         <div className="relative">
+                           <img src={logoImage} alt="Logo" className="h-32 object-contain drop-shadow-lg rounded-lg" />
+                           <div className="absolute inset-0 bg-black/30 rounded-lg opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity no-print">
+                             <Upload className="text-white" size={24} />
+                           </div>
+                           <button 
+                            onClick={(e) => { e.stopPropagation(); setLogoImage(null); }}
+                            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 hover:bg-red-600 no-print"
+                           >
+                             <X size={12} />
+                           </button>
+                         </div>
+                       ) : (
+                         <div className="relative">
+                            <div className="w-24 h-24 bg-white rounded-2xl flex items-center justify-center shadow-2xl group-hover:scale-105 transition-transform">
+                              <Printer className="text-brand-blue" size={50} />
+                            </div>
+                            <div className="absolute -top-2 -right-2 w-6 h-6 bg-blue-300 rounded-full border-4 border-brand-blue"></div>
+                            <div className="absolute -bottom-8 left-0 right-0 text-center opacity-0 group-hover:opacity-100 transition-opacity text-xs font-bold text-white/80 no-print">
+                              Clic para subir logo
+                            </div>
+                         </div>
+                       )}
+                    </div>
+
+                    <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tighter leading-none mb-2 drop-shadow-sm">
+                      Centro Fotocopiado SS
+                    </h1>
+                    <h2 className="text-lg md:text-xl font-bold tracking-[0.25em] uppercase opacity-90 mb-6">
+                      Inversiones & Servicios
+                    </h2>
+                    
+                    <div className="inline-flex items-center gap-3 bg-white/20 backdrop-blur-md px-8 py-2.5 rounded-full border border-white/30 shadow-inner">
+                      <span className="w-2.5 h-2.5 bg-green-400 rounded-full animate-pulse shadow-[0_0_8px_rgba(74,222,128,0.8)]"></span>
+                      <span className="text-sm font-black tracking-widest uppercase">
+                        Tasa Hoy: {formatCurrency(bcvRate)}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* CUERPO DE PRECIOS */}
+                <div className="bg-white p-8 md:p-12 flex-grow">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    {['Impresiones', 'Especiales', 'Plastificados', 'Servicios Informáticos', 'Descargas Digitales', 'Papelería y Artículos'].map((cat) => {
+                      const isFullWidth = ['Servicios Informáticos', 'Descargas Digitales', 'Papelería y Artículos'].includes(cat);
+                      
+                      return (
+                        <div key={cat} className={isFullWidth ? 'md:col-span-2' : ''}>
+                          <div className="flex items-center gap-3 mb-6">
+                            <div className="h-10 w-2.5 bg-brand-blue rounded-full"></div>
+                            <h3 className="text-2xl font-black text-gray-800 uppercase tracking-tight">
+                              {cat}
+                            </h3>
+                          </div>
+                          
+                          <div className={`grid grid-cols-1 ${isFullWidth ? 'md:grid-cols-2 gap-x-8' : ''} gap-3`}>
+                            {services.filter(s => s.category === cat).map((service) => (
+                              <div key={service.id} className="flex items-center justify-between p-4 rounded-2xl border-2 border-gray-100 hover:border-brand-blue/30 hover:bg-blue-50/30 transition-all">
+                                <div className="flex items-center gap-5">
+                                    <div className="bg-gray-100 p-3.5 rounded-xl text-gray-700">
+                                      {service.icon}
+                                    </div>
+                                    <div>
+                                      <p className="font-black text-gray-900 text-lg leading-tight mb-1">{service.name}</p>
+                                      <div className="flex items-center gap-2">
+                                         <span className="bg-brand-blue/10 text-brand-blue text-[10px] px-2.5 py-1 rounded font-black uppercase tracking-wider">Ref. ${service.usd.toFixed(2)}</span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div className="text-right flex flex-col items-end min-w-fit ml-4">
+                                    <span className="text-3xl font-black text-brand-blue tracking-tighter tabular-nums">
+                                      {calculateBs(service.usd).toLocaleString('es-VE')}
+                                    </span>
+                                    <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Bolívares</span>
+                                  </div>
+                                </div>
+                              ))}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* PIE DE PÁGINA */}
+                <div className="bg-gray-900 text-white p-12 flex-shrink-0">
+                  <div className="flex flex-col md:flex-row justify-between items-center gap-12">
+                    <div className="text-center md:text-left flex-1">
+                      <h4 className="text-2xl font-black uppercase mb-6 tracking-tight flex items-center justify-center md:justify-start gap-3">
+                        <MessageCircle className="text-green-400" size={32} />
+                        ¡Contáctanos por WhatsApp!
+                      </h4>
+                      <div className="space-y-4">
+                        <a href={contactInfo.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-4 bg-white/10 hover:bg-white/20 p-4 px-6 rounded-2xl border border-white/10 transition-all cursor-pointer no-underline group">
+                          <Smartphone className="text-brand-blue group-hover:scale-110 transition-transform" size={28} />
+                          <div className="text-left">
+                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Escríbenos al</p>
+                            <p className="text-2xl font-black tracking-tighter">{contactInfo.phone}</p>
+                          </div>
+                        </a>
+                        <p className="text-gray-400 text-sm font-medium">Recibimos tus documentos en línea y los tenemos listos para retirar.</p>
+                      </div>
+                    </div>
+
+                    {/* QR AREA */}
+                    <div 
+                      className="bg-white p-5 rounded-3xl shadow-2xl flex flex-col items-center gap-3 cursor-pointer group hover:scale-105 transition-transform"
+                      onClick={() => qrInputRef.current.click()}
+                      title="Clic para cambiar QR"
+                    >
+                      <div className="bg-white p-3 rounded-2xl border-4 border-gray-50 flex items-center justify-center relative overflow-hidden">
+                        <img 
+                          src={qrImage || defaultQrUrl} 
+                          alt="WhatsApp QR Code" 
+                          className="w-32 h-32 md:w-40 md:h-40 object-cover"
+                        />
+                        {!qrImage && (
+                          <div className="absolute w-8 h-8 bg-white rounded-lg p-1 flex items-center justify-center shadow-md">
+                             <MessageCircle size={16} className="text-brand-blue" />
+                          </div>
+                        )}
+                        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity text-white text-xs font-bold text-center p-2 no-print">
+                          <Upload size={24} className="mb-1" />
+                          <br/>Cambiar
+                        </div>
+                      </div>
+                      <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em]">Escanea y Envía</span>
+                    </div>
+                  </div>
+
+                  <div className="mt-12 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 text-center">
+                    <div className="flex gap-6 items-center">
+                       <span className="text-[10px] text-gray-500 font-black uppercase tracking-widest">Calidad Epson L3250</span>
+                       <div className="w-1 h-1 bg-gray-700 rounded-full"></div>
+                       <span className="text-[10px] text-gray-500 font-black uppercase tracking-widest">Servicio Express</span>
+                    </div>
+                    <p className="text-[10px] text-gray-600 font-medium max-w-xs md:text-right">
+                      Precios redondeados según tasa BCV. Los montos pueden variar diariamente.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        };
+
+        const root = createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

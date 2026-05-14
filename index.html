@@ -21,7 +21,7 @@
     <script type="text/babel" data-type="module">
         import React, { useState, useEffect } from 'https://esm.sh/react@18';
         import { createRoot } from 'https://esm.sh/react-dom@18/client';
-        import { Printer, Calculator, Camera, FileText, Layers, ShieldCheck, MessageCircle, Smartphone, HardDrive, Music, Video, Database, Package, Settings, Monitor, Wrench, RefreshCw } from 'https://esm.sh/lucide-react@0.292.0';
+        import { Printer, Calculator, Camera, FileText, Layers, ShieldCheck, MessageCircle, Smartphone, HardDrive, Music, Video, Database, Package, Settings, Monitor, Wrench, RefreshCw, PenTool, LayoutTemplate, Palette, Folder, Book } from 'https://esm.sh/lucide-react@0.292.0';
 
         const App = () => {
           // Tasa del BCV con memoria local
@@ -68,44 +68,59 @@
           };
 
           // Rutas a las imágenes locales (Estáticas)
-          const localLogoUrl = "./descarga.png";
-          const localQrUrl = "./QR WhatsApp Centro Fotocopiado SS (041219699318).jpeg";
+          const localLogoUrl = "./PRINTER CENTER (1).png";
+          const localQrUrl = "./Sitio Web Centro Fotocopiado SS.png";
 
           // Lista de servicios completa y consolidada
           const [services] = useState([
-            // IMPRESIONES B/N
-            { id: 1, name: 'Copia / Impresión B/N (Carta)', usd: 0.15, icon: <FileText size={20} />, category: 'Impresiones' },
-            { id: 20, name: 'Copia / Impresión B/N (Oficio)', usd: 0.20, icon: <FileText size={20} />, category: 'Impresiones' },
+            // IMPRESIONES B/N (Papel Bond)
+            { id: 1, name: 'Copia / Impresión B/N (Carta)', usd: 0.15, icon: <FileText size={20} />, category: 'Impresiones (Papel Normal)' },
+            { id: 20, name: 'Copia / Impresión B/N (Oficio)', usd: 0.20, icon: <FileText size={20} />, category: 'Impresiones (Papel Normal)' },
             
-            // IMPRESIONES COLOR MEDIO
-            { id: 2, name: 'Copia / Impresión Color (Carta)', usd: 0.25, icon: <FileText className="text-blue-500" size={20} />, category: 'Impresiones' },
-            { id: 21, name: 'Copia / Impresión Color (Oficio)', usd: 0.30, icon: <FileText className="text-blue-500" size={20} />, category: 'Impresiones' },
+            // IMPRESIONES COLOR MEDIO (Papel Bond)
+            { id: 2, name: 'Copia / Impresión Color (Carta)', usd: 0.25, icon: <FileText className="text-blue-500" size={20} />, category: 'Impresiones (Papel Normal)' },
+            { id: 21, name: 'Copia / Impresión Color (Oficio)', usd: 0.30, icon: <FileText className="text-blue-500" size={20} />, category: 'Impresiones (Papel Normal)' },
             
-            // IMPRESIONES FULL COLOR
-            { id: 4, name: 'Impresión Color Full (Carta)', usd: 0.50, icon: <Layers className="text-blue-600" size={20} />, category: 'Impresiones' },
-            { id: 22, name: 'Impresión Color Full (Oficio)', usd: 0.60, icon: <Layers className="text-blue-600" size={20} />, category: 'Impresiones' },
+            // IMPRESIONES FULL COLOR (Papel Bond)
+            { id: 4, name: 'Impresión Color Full (Carta)', usd: 0.50, icon: <Layers className="text-blue-600" size={20} />, category: 'Impresiones (Papel Normal)' },
+            { id: 22, name: 'Impresión Color Full (Oficio)', usd: 0.60, icon: <Layers className="text-blue-600" size={20} />, category: 'Impresiones (Papel Normal)' },
             
-            // ESPECIALES
-            { id: 5, name: 'Fondo Negro (Papel Fotográfico)', usd: 2.00, icon: <FileText className="text-gray-900" size={20} />, category: 'Especiales' },
-            { id: 6, name: '8 Fotos Tipo Carnet', usd: 3.00, icon: <Camera className="text-blue-600" size={20} />, category: 'Especiales' },
-            { id: 14, name: 'Foto Tamaño Carta (Papel Foto)', usd: 2.00, icon: <Camera className="text-purple-600" size={20} />, category: 'Especiales' },
+            // IMPRESIONES PREMIUM (Opalina y Fotográfico)
+            { id: 32, name: 'Impresión B/N (Cartulina Opalina)', usd: 0.50, icon: <FileText className="text-purple-600" size={20} />, category: 'Impresiones Premium' },
+            { id: 33, name: 'Impresión Color (Cartulina Opalina)', usd: 0.80, icon: <FileText className="text-purple-600" size={20} />, category: 'Impresiones Premium' },
+            { id: 34, name: 'Impresión Full Color (Opalina)', usd: 1.00, icon: <Layers className="text-purple-700" size={20} />, category: 'Impresiones Premium' },
+            { id: 5, name: 'Fondo Negro (Papel Fotográfico)', usd: 2.00, icon: <FileText className="text-gray-900" size={20} />, category: 'Impresiones Premium' },
+            { id: 14, name: 'Foto Tamaño Carta (Papel Foto)', usd: 2.00, icon: <Camera className="text-pink-600" size={20} />, category: 'Impresiones Premium' },
+            { id: 35, name: 'Foto Tamaño A4 (Papel Foto)', usd: 2.00, icon: <Camera className="text-pink-600" size={20} />, category: 'Impresiones Premium' },
+            { id: 6, name: '8 Fotos Tipo Carnet', usd: 3.00, icon: <Camera className="text-pink-700" size={20} />, category: 'Impresiones Premium' },
             
             // PLASTIFICADOS
             { id: 7, name: 'Plastificado Carnet / Cédula', usd: 0.50, icon: <ShieldCheck size={20} />, category: 'Plastificados' },
             { id: 8, name: 'Plastificado Carta', usd: 1.50, icon: <ShieldCheck size={20} />, category: 'Plastificados' },
             { id: 9, name: 'Plastificado Oficio', usd: 2.00, icon: <ShieldCheck size={20} />, category: 'Plastificados' },
+
+            // ENCUADERNACIONES (NUEVO)
+            { id: 42, name: 'Encuadernado Básico (Hasta 50 hjs)', usd: 1.50, icon: <Book className="text-blue-600" size={20} />, category: 'Encuadernaciones' },
+            { id: 43, name: 'Encuadernado + Portada Plastificada', usd: 2.50, icon: <Book className="text-blue-800" size={20} />, category: 'Encuadernaciones' },
             
+            // DISEÑO Y REDACCIÓN (NUEVO) - Precios base sugeridos
+            { id: 36, name: 'Redacción Carta / Permiso (Solo diseño)', usd: 3.00, icon: <PenTool className="text-emerald-600" size={20} />, category: 'Diseño y Redacción' },
+            { id: 37, name: 'Actualizar CV (Solo diseño)', usd: 5.00, icon: <LayoutTemplate className="text-emerald-600" size={20} />, category: 'Diseño y Redacción' },
+            { id: 38, name: 'Creación CV desde cero (Solo diseño)', usd: 10.00, icon: <LayoutTemplate className="text-emerald-700" size={20} />, category: 'Diseño y Redacción' },
+            { id: 39, name: 'Diseño Post / Historia (Solo diseño)', usd: 5.00, icon: <Palette className="text-emerald-600" size={20} />, category: 'Diseño y Redacción' },
+            { id: 40, name: 'Diseño Básico Tarjeta/Volante (Solo diseño)', usd: 8.00, icon: <Palette className="text-emerald-700" size={20} />, category: 'Diseño y Redacción' },
+
             // SERVICIOS INFORMÁTICOS (Soporte Técnico)
-            { id: 25, name: 'Formateo Básico (Sin respaldo)', usd: 15.00, icon: <Monitor className="text-indigo-500" size={20} />, category: 'Servicios Informáticos' },
-            { id: 26, name: 'Formateo Completo (Con respaldo)', usd: 25.00, icon: <Monitor className="text-indigo-600" size={20} />, category: 'Servicios Informáticos' },
-            { id: 10, name: 'Recuperación Datos (Hasta 32GB)', usd: 5.00, icon: <HardDrive className="text-orange-400" size={20} />, category: 'Servicios Informáticos' },
-            { id: 12, name: 'Recuperación Datos (Disco Duro)', usd: 15.00, icon: <HardDrive className="text-orange-600" size={20} />, category: 'Servicios Informáticos' },
-            { id: 27, name: 'Optimización / PC Lenta', usd: 10.00, icon: <Settings className="text-gray-600" size={20} />, category: 'Servicios Informáticos' },
-            { id: 28, name: 'Limpieza de Virus + Antivirus', usd: 10.00, icon: <ShieldCheck className="text-red-500" size={20} />, category: 'Servicios Informáticos' },
-            { id: 29, name: 'Instalación Programas (Office/Diseño)', usd: 5.00, icon: <Wrench className="text-gray-700" size={20} />, category: 'Servicios Informáticos' },
-            { id: 30, name: 'Configuración Impresora / Drivers', usd: 5.00, icon: <Printer className="text-gray-600" size={20} />, category: 'Servicios Informáticos' },
-            { id: 23, name: 'Activación Windows / Licencias', usd: 5.00, icon: <Settings className="text-gray-500" size={20} />, category: 'Servicios Informáticos' },
-            { id: 31, name: 'Revisión / Otro problema Software', usd: 5.00, icon: <Wrench className="text-gray-400" size={20} />, category: 'Servicios Informáticos' },
+            { id: 25, name: 'Formateo Básico (Sin respaldo)', usd: 15.00, icon: <Monitor className="text-orange-500" size={20} />, category: 'Soporte Técnico' },
+            { id: 26, name: 'Formateo Completo (Con respaldo)', usd: 25.00, icon: <Monitor className="text-orange-600" size={20} />, category: 'Soporte Técnico' },
+            { id: 10, name: 'Recuperación Datos (Hasta 32GB)', usd: 5.00, icon: <HardDrive className="text-orange-400" size={20} />, category: 'Soporte Técnico' },
+            { id: 12, name: 'Recuperación Datos (Disco Duro)', usd: 15.00, icon: <HardDrive className="text-orange-600" size={20} />, category: 'Soporte Técnico' },
+            { id: 27, name: 'Optimización / PC Lenta', usd: 10.00, icon: <Settings className="text-gray-600" size={20} />, category: 'Soporte Técnico' },
+            { id: 28, name: 'Limpieza de Virus + Antivirus', usd: 10.00, icon: <ShieldCheck className="text-red-500" size={20} />, category: 'Soporte Técnico' },
+            { id: 29, name: 'Instalación Programas (Office/Diseño)', usd: 5.00, icon: <Wrench className="text-gray-700" size={20} />, category: 'Soporte Técnico' },
+            { id: 30, name: 'Configuración Impresora / Drivers', usd: 5.00, icon: <Printer className="text-gray-600" size={20} />, category: 'Soporte Técnico' },
+            { id: 23, name: 'Activación Windows / Licencias', usd: 5.00, icon: <Settings className="text-gray-500" size={20} />, category: 'Soporte Técnico' },
+            { id: 31, name: 'Revisión / Otro problema Software', usd: 5.00, icon: <Wrench className="text-gray-400" size={20} />, category: 'Soporte Técnico' },
 
             // DESCARGAS
             { id: 15, name: 'Descarga de Canción (MP3)', usd: 0.10, icon: <Music className="text-indigo-500" size={20} />, category: 'Descargas Digitales' },
@@ -115,6 +130,7 @@
             // PAPELERÍA Y ARTÍCULOS
             { id: 18, name: 'Funda Protectora (Unidad)', usd: 0.30, icon: <Package className="text-teal-500" size={20} />, category: 'Papelería y Artículos' },
             { id: 19, name: 'Funda Protectora (Promo 2x)', usd: 0.50, icon: <Package className="text-teal-600" size={20} />, category: 'Papelería y Artículos' },
+            { id: 41, name: 'Carpeta Marrón + Gancho', usd: 1.00, icon: <Folder className="text-amber-700" size={20} />, category: 'Papelería y Artículos' },
           ]);
 
           const calculateBs = (usd) => {
@@ -248,8 +264,9 @@
                 {/* CUERPO DE PRECIOS */}
                 <div className="bg-white p-8 md:p-12 flex-grow">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                    {['Impresiones', 'Especiales', 'Plastificados', 'Servicios Informáticos', 'Descargas Digitales', 'Papelería y Artículos'].map((cat) => {
-                      const isFullWidth = ['Servicios Informáticos', 'Descargas Digitales', 'Papelería y Artículos'].includes(cat);
+                    {/* Mapeo de categorías en un orden lógico para el cliente */}
+                    {['Impresiones (Papel Normal)', 'Impresiones Premium', 'Diseño y Redacción', 'Soporte Técnico', 'Plastificados', 'Encuadernaciones', 'Descargas Digitales', 'Papelería y Artículos'].map((cat) => {
+                      const isFullWidth = ['Soporte Técnico', 'Diseño y Redacción', 'Descargas Digitales', 'Papelería y Artículos'].includes(cat);
                       
                       return (
                         <div key={cat} className={isFullWidth ? 'md:col-span-2' : ''}>
@@ -301,30 +318,30 @@
                         <a href={contactInfo.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-4 bg-white/10 hover:bg-white/20 p-4 px-6 rounded-2xl border border-white/10 transition-all cursor-pointer no-underline group">
                           <Smartphone className="text-brand-blue group-hover:scale-110 transition-transform" size={28} />
                           <div className="text-left">
-                      <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Escríbenos al</p>
-                      <p className="text-2xl font-black tracking-tighter">{contactInfo.phone}</p>
+                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Escríbenos al</p>
+                            <p className="text-2xl font-black tracking-tighter">{contactInfo.phone}</p>
+                          </div>
+                        </a>
+                        <p className="text-gray-400 text-sm font-medium">Recibimos tus documentos en línea y los tenemos listos para retirar.</p>
+                      </div>
                     </div>
-                  </a>
-                  <p className="text-gray-400 text-sm font-medium">Recibimos tus documentos en línea y los tenemos listos para retirar.</p>
-                </div>
-              </div>
 
-              {/* QR AREA FIJO */}
-              <div className="bg-white p-5 rounded-3xl shadow-2xl flex flex-col items-center gap-3">
-                <div className="bg-white p-3 rounded-2xl border-4 border-gray-50 flex items-center justify-center relative overflow-hidden">
-                  {/* Se carga la imagen local o de Netlify EXCLUSIVAMENTE */}
-                  <img 
-                    src={localQrUrl} 
-                    alt="WhatsApp QR Code Centro Fotocopiado SS" 
-                    className="w-32 h-32 md:w-40 md:h-40 object-cover"
-                  />
-                </div>
-                <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em]">Escanea y Envía</span>
-              </div>
-            </div>
+                    {/* QR AREA FIJO */}
+                    <div className="bg-white p-5 rounded-3xl shadow-2xl flex flex-col items-center gap-3">
+                      <div className="bg-white p-3 rounded-2xl border-4 border-gray-50 flex items-center justify-center relative overflow-hidden">
+                        {/* Se carga la imagen local o de Netlify EXCLUSIVAMENTE */}
+                        <img 
+                          src={localQrUrl} 
+                          alt="WhatsApp QR Code Centro Fotocopiado SS" 
+                          className="w-32 h-32 md:w-40 md:h-40 object-cover"
+                        />
+                      </div>
+                      <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em]">Escanea y Envía</span>
+                    </div>
+                  </div>
 
-            <div className="mt-12 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 text-center">
-              <div className="flex gap-6 items-center">
+                  <div className="mt-12 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 text-center">
+                    <div className="flex gap-6 items-center">
                        <span className="text-[10px] text-gray-500 font-black uppercase tracking-widest">Calidad Epson</span>
                        <div className="w-1 h-1 bg-gray-700 rounded-full"></div>
                        <span className="text-[10px] text-gray-500 font-black uppercase tracking-widest">Servicio Express</span>

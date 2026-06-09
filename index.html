@@ -5,23 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora - Centro Fotocopiado SS</title>
     
-    <!-- Carga de Tailwind CSS para los estilos -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Fuentes de Google -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     
-    <!-- Carga de React y Babel para que funcione en un solo archivo -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
 <body>
     <div id="root"></div>
 
-    <!-- Script principal de la Aplicación -->
     <script type="text/babel" data-type="module">
         import React, { useState, useEffect } from 'https://esm.sh/react@18';
         import { createRoot } from 'https://esm.sh/react-dom@18/client';
-        import { Printer, Calculator, Camera, FileText, Layers, ShieldCheck, MessageCircle, Smartphone, HardDrive, Music, Video, Database, Package, Settings, Monitor, Wrench, RefreshCw, PenTool, LayoutTemplate, Palette, Folder, Book } from 'https://esm.sh/lucide-react@0.292.0';
+        import { Printer, Calculator, Camera, FileText, Layers, ShieldCheck, MessageCircle, Smartphone, HardDrive, Music, Video, Database, Package, Settings, Monitor, Wrench, RefreshCw, PenTool, LayoutTemplate, Palette, Folder, Book, Globe, UserCheck } from 'https://esm.sh/lucide-react@0.292.0';
 
         const App = () => {
           // Tasa del BCV con memoria local
@@ -32,7 +28,7 @@
 
           const [isFetchingRate, setIsFetchingRate] = useState(false);
 
-          // Función para obtener la tasa del BCV oficial a través de DolarAPI (CORS-friendly)
+          // Función para obtener la tasa del BCV oficial a través de DolarAPI
           const fetchBCVRate = async () => {
             setIsFetchingRate(true);
             try {
@@ -45,18 +41,16 @@
                     }
                 }
             } catch (error) {
-                console.error("Error obteniendo tasa del BCV, manteniendo la última guardada:", error);
+                console.error("Error obteniendo tasa del BCV:", error);
             } finally {
                 setIsFetchingRate(false);
             }
           };
 
-          // Actualizar automáticamente al abrir la aplicación
           useEffect(() => {
             fetchBCVRate();
           }, []);
 
-          // Guardar manualmente si el usuario la cambia a mano
           useEffect(() => {
             localStorage.setItem('centro_ss_bcvRate', bcvRate.toString());
           }, [bcvRate]);
@@ -71,21 +65,21 @@
           const localLogoUrl = "./descarga.png";
           const localQrUrl = "./Sitio Web Centro Fotocopiado SS.png";
 
-          // Lista de servicios completa y consolidada
+          // Lista de servicios
           const [services] = useState([
-            // IMPRESIONES B/N (Papel Bond)
+            // IMPRESIONES B/N
             { id: 1, name: 'Copia / Impresión B/N (Carta)', usd: 0.15, icon: <FileText size={20} />, category: 'Impresiones (Papel Normal)' },
             { id: 20, name: 'Copia / Impresión B/N (Oficio)', usd: 0.20, icon: <FileText size={20} />, category: 'Impresiones (Papel Normal)' },
             
-            // IMPRESIONES COLOR MEDIO (Papel Bond)
+            // IMPRESIONES COLOR MEDIO
             { id: 2, name: 'Copia / Impresión Color (Carta)', usd: 0.25, icon: <FileText className="text-blue-500" size={20} />, category: 'Impresiones (Papel Normal)' },
             { id: 21, name: 'Copia / Impresión Color (Oficio)', usd: 0.30, icon: <FileText className="text-blue-500" size={20} />, category: 'Impresiones (Papel Normal)' },
             
-            // IMPRESIONES FULL COLOR (Papel Bond)
+            // IMPRESIONES FULL COLOR
             { id: 4, name: 'Impresión Color Full (Carta)', usd: 0.50, icon: <Layers className="text-blue-600" size={20} />, category: 'Impresiones (Papel Normal)' },
             { id: 22, name: 'Impresión Color Full (Oficio)', usd: 0.60, icon: <Layers className="text-blue-600" size={20} />, category: 'Impresiones (Papel Normal)' },
             
-            // IMPRESIONES PREMIUM (Opalina y Fotográfico)
+            // IMPRESIONES PREMIUM
             { id: 32, name: 'Impresión B/N (Cartulina Opalina)', usd: 0.50, icon: <FileText className="text-purple-600" size={20} />, category: 'Impresiones Premium' },
             { id: 33, name: 'Impresión Color (Cartulina Opalina)', usd: 0.80, icon: <FileText className="text-purple-600" size={20} />, category: 'Impresiones Premium' },
             { id: 34, name: 'Impresión Full Color (Opalina)', usd: 1.00, icon: <Layers className="text-purple-700" size={20} />, category: 'Impresiones Premium' },
@@ -94,23 +88,27 @@
             { id: 35, name: 'Foto Tamaño A4 (Papel Foto)', usd: 2.00, icon: <Camera className="text-pink-600" size={20} />, category: 'Impresiones Premium' },
             { id: 6, name: '8 Fotos Tipo Carnet', usd: 3.00, icon: <Camera className="text-pink-700" size={20} />, category: 'Impresiones Premium' },
             
+            // TRÁMITES EN LÍNEA
+            { id: 44, name: 'Trámites Básicos', description: 'Citas de Cédula (SAIME), Actualización de RIF, Antecedentes Penales y Planillas rápidas.', usd: 3.00, icon: <Globe className="text-blue-500" size={20} />, category: 'Trámites en Línea' },
+            { id: 46, name: 'Trámites Complejos', description: 'Citas de Pasaporte, Recuperación de claves/usuarios bloqueados, Creación de correos y Apostillas.', usd: 5.00, icon: <UserCheck className="text-blue-700" size={20} />, category: 'Trámites en Línea' },
+
             // PLASTIFICADOS
             { id: 7, name: 'Plastificado Carnet / Cédula', usd: 0.50, icon: <ShieldCheck size={20} />, category: 'Plastificados' },
             { id: 8, name: 'Plastificado Carta', usd: 1.50, icon: <ShieldCheck size={20} />, category: 'Plastificados' },
             { id: 9, name: 'Plastificado Oficio', usd: 2.00, icon: <ShieldCheck size={20} />, category: 'Plastificados' },
 
-            // ENCUADERNACIONES (NUEVO)
+            // ENCUADERNACIONES
             { id: 42, name: 'Encuadernado Básico (Hasta 50 hjs)', usd: 1.50, icon: <Book className="text-blue-600" size={20} />, category: 'Encuadernaciones' },
             { id: 43, name: 'Encuadernado + Portada Plastificada', usd: 2.50, icon: <Book className="text-blue-800" size={20} />, category: 'Encuadernaciones' },
             
-            // DISEÑO Y REDACCIÓN (NUEVO) - Precios base sugeridos
+            // DISEÑO Y REDACCIÓN
             { id: 36, name: 'Redacción Carta / Permiso (Solo diseño)', usd: 3.00, icon: <PenTool className="text-emerald-600" size={20} />, category: 'Diseño y Redacción' },
             { id: 37, name: 'Actualizar CV (Solo diseño)', usd: 5.00, icon: <LayoutTemplate className="text-emerald-600" size={20} />, category: 'Diseño y Redacción' },
             { id: 38, name: 'Creación CV desde cero (Solo diseño)', usd: 10.00, icon: <LayoutTemplate className="text-emerald-700" size={20} />, category: 'Diseño y Redacción' },
             { id: 39, name: 'Diseño Post / Historia (Solo diseño)', usd: 5.00, icon: <Palette className="text-emerald-600" size={20} />, category: 'Diseño y Redacción' },
-            { id: 40, name: 'Diseño Básico Tarjeta/Volante (Solo diseño)', usd: 8.00, icon: <Palette className="text-emerald-700" size={20} />, category: 'Diseño y Redacción' },
+            { id: 40, name: 'Diseño Básico Tarjeta/Volante', usd: 8.00, icon: <Palette className="text-emerald-700" size={20} />, category: 'Diseño y Redacción' },
 
-            // SERVICIOS INFORMÁTICOS (Soporte Técnico)
+            // SOPORTE TÉCNICO
             { id: 25, name: 'Formateo Básico (Sin respaldo)', usd: 15.00, icon: <Monitor className="text-orange-500" size={20} />, category: 'Soporte Técnico' },
             { id: 26, name: 'Formateo Completo (Con respaldo)', usd: 25.00, icon: <Monitor className="text-orange-600" size={20} />, category: 'Soporte Técnico' },
             { id: 10, name: 'Recuperación Datos (Hasta 32GB)', usd: 5.00, icon: <HardDrive className="text-orange-400" size={20} />, category: 'Soporte Técnico' },
@@ -265,7 +263,7 @@
                 <div className="bg-white p-8 md:p-12 flex-grow">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                     {/* Mapeo de categorías en un orden lógico para el cliente */}
-                    {['Impresiones (Papel Normal)', 'Impresiones Premium', 'Diseño y Redacción', 'Soporte Técnico', 'Plastificados', 'Encuadernaciones', 'Descargas Digitales', 'Papelería y Artículos'].map((cat) => {
+                    {['Impresiones (Papel Normal)', 'Impresiones Premium', 'Trámites en Línea', 'Diseño y Redacción', 'Soporte Técnico', 'Plastificados', 'Encuadernaciones', 'Descargas Digitales', 'Papelería y Artículos'].map((cat) => {
                       const isFullWidth = ['Soporte Técnico', 'Diseño y Redacción', 'Descargas Digitales', 'Papelería y Artículos'].includes(cat);
                       
                       return (
@@ -286,6 +284,9 @@
                                     </div>
                                     <div>
                                       <p className="font-black text-gray-900 text-lg leading-tight mb-1">{service.name}</p>
+                                      {service.description && (
+                                        <p className="text-xs text-gray-500 font-medium mb-2 leading-snug max-w-[250px] md:max-w-xs">{service.description}</p>
+                                      )}
                                       <div className="flex items-center gap-2">
                                          <span className="bg-brand-blue/10 text-brand-blue text-[10px] px-2.5 py-1 rounded font-black uppercase tracking-wider">Ref. ${service.usd.toFixed(2)}</span>
                                       </div>

@@ -5,18 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora - Centro Fotocopiado SS</title>
     
+    <!-- Carga de Tailwind CSS para los estilos -->
     <script src="https://cdn.tailwindcss.com"></script>
     
+    <!-- Fuentes de Google -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     
+    <!-- Carga de React y Babel para que funcione en un solo archivo -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- MAPA DE IMPORTACIÓN: Soluciona el error de pantalla blanca en navegadores modernos -->
+    <script type="importmap">
+      {
+        "imports": {
+          "react": "https://esm.sh/react@18",
+          "react-dom/client": "https://esm.sh/react-dom@18/client",
+          "react/jsx-runtime": "https://esm.sh/react@18/jsx-runtime"
+        }
+      }
+    </script>
 </head>
 <body>
     <div id="root"></div>
 
+    <!-- Script principal de la Aplicación -->
     <script type="text/babel" data-type="module">
-        import React, { useState, useEffect } from 'https://esm.sh/react@18';
-        import { createRoot } from 'https://esm.sh/react-dom@18/client';
+        import React, { useState, useEffect } from 'react';
+        import { createRoot } from 'react-dom/client';
         import { Printer, Calculator, Camera, FileText, Layers, ShieldCheck, MessageCircle, Smartphone, HardDrive, Music, Video, Database, Package, Settings, Monitor, Wrench, RefreshCw, PenTool, LayoutTemplate, Palette, Folder, Book, Globe, UserCheck } from 'https://esm.sh/lucide-react@0.292.0';
 
         const App = () => {
@@ -55,15 +70,13 @@
             localStorage.setItem('centro_ss_bcvRate', bcvRate.toString());
           }, [bcvRate]);
 
-          // Datos de contacto
+          // Datos de contacto y Rutas Locales
           const contactInfo = {
             phone: "+58 412-1969318",
             link: "https://bit.ly/Centro_Fotocopiado_SS"
           };
-
-          // Rutas a las imágenes locales (Estáticas)
-          const localLogoUrl = "./descarga.png";
-          const localQrUrl = "./Sitio Web Centro Fotocopiado SS.png";
+          const localLogoUrl = "./PRINTER CENTER (1).png";
+          const localQrUrl = "./QR WhatsApp Centro Fotocopiado SS (041219699318).jpeg";
 
           // Lista de servicios
           const [services] = useState([
@@ -185,7 +198,7 @@
                 `}
               </style>
 
-              {/* PANEL DE CONTROL */}
+              {/* PANEL DE CONTROL SUPERIOR */}
               <div className="max-w-4xl mx-auto space-y-6 mb-8 no-print">
                 <div className="bg-white rounded-xl shadow-md p-6 border-t-4 border-brand-blue">
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -262,7 +275,6 @@
                 {/* CUERPO DE PRECIOS */}
                 <div className="bg-white p-8 md:p-12 flex-grow">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                    {/* Mapeo de categorías en un orden lógico para el cliente */}
                     {['Impresiones (Papel Normal)', 'Impresiones Premium', 'Trámites en Línea', 'Diseño y Redacción', 'Soporte Técnico', 'Plastificados', 'Encuadernaciones', 'Descargas Digitales', 'Papelería y Artículos'].map((cat) => {
                       const isFullWidth = ['Soporte Técnico', 'Diseño y Redacción', 'Descargas Digitales', 'Papelería y Artículos'].includes(cat);
                       

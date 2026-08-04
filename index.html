@@ -14,7 +14,7 @@
     <!-- Carga de React y Babel para que funcione en un solo archivo -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-    <!-- MAPA DE IMPORTACIÓN: Soluciona el error de pantalla blanca en navegadores modernos -->
+    <!-- MAPA DE IMPORTACIÓN: Soluciona el error de pantalla blanca -->
     <script type="importmap">
       {
         "imports": {
@@ -28,11 +28,17 @@
 <body>
     <div id="root"></div>
 
-    <!-- Script principal de la Aplicación -->
     <script type="text/babel" data-type="module">
         import React, { useState, useEffect } from 'react';
         import { createRoot } from 'react-dom/client';
-        import { Printer, Calculator, Camera, FileText, Layers, ShieldCheck, MessageCircle, Smartphone, HardDrive, Music, Video, Database, Package, Settings, Monitor, Wrench, RefreshCw, PenTool, LayoutTemplate, Palette, Folder, Book, Globe, UserCheck } from 'https://esm.sh/lucide-react@0.292.0';
+        import { Printer, Calculator, Camera, FileText, Layers, ShieldCheck, MessageCircle, Smartphone, HardDrive, Music, Video, Database, Package, Settings, Monitor, Wrench, RefreshCw, PenTool, LayoutTemplate, Palette, Folder, Book, Globe, UserCheck, Mail } from 'react';
+
+        // Necesitamos importar los iconos directamente de la CDN de Lucide para que funcione en el navegador local
+        const IconBase = ({ name, size = 24, className = '', color = 'currentColor' }) => {
+            return (
+                <i data-lucide={name} className={className} style={{ width: size, height: size, color: color, display: 'inline-block' }}></i>
+            );
+        };
 
         const App = () => {
           // Tasa del BCV con memoria local
@@ -43,7 +49,6 @@
 
           const [isFetchingRate, setIsFetchingRate] = useState(false);
 
-          // Función para obtener la tasa del BCV oficial a través de DolarAPI
           const fetchBCVRate = async () => {
             setIsFetchingRate(true);
             try {
@@ -64,6 +69,11 @@
 
           useEffect(() => {
             fetchBCVRate();
+            // Cargar los iconos de Lucide una vez que el componente se monta
+            const script = document.createElement('script');
+            script.src = 'https://unpkg.com/lucide@latest';
+            script.onload = () => lucide.createIcons();
+            document.head.appendChild(script);
           }, []);
 
           useEffect(() => {
@@ -75,73 +85,76 @@
             phone: "+58 412-1969318",
             link: "https://bit.ly/Centro_Fotocopiado_SS"
           };
-          const localLogoUrl = "./descarga.png";
-          const localQrUrl = "./Sitio Web Centro Fotocopiado SS.png";
+          const localLogoUrl = "./PRINTER CENTER (1).png";
+          const localQrUrl = "./QR WhatsApp Centro Fotocopiado SS (041219699318).jpeg";
 
-          // Lista de servicios
           const [services] = useState([
             // IMPRESIONES B/N
-            { id: 1, name: 'Copia / Impresión B/N (Carta)', usd: 0.15, icon: <FileText size={20} />, category: 'Impresiones (Papel Normal)' },
-            { id: 20, name: 'Copia / Impresión B/N (Oficio)', usd: 0.20, icon: <FileText size={20} />, category: 'Impresiones (Papel Normal)' },
+            { id: 1, name: 'Copia / Impresión B/N (Carta)', usd: 0.15, icon: 'file-text', category: 'Impresiones (Papel Normal)', iconClass: 'text-gray-700' },
+            { id: 20, name: 'Copia / Impresión B/N (Oficio)', usd: 0.20, icon: 'file-text', category: 'Impresiones (Papel Normal)', iconClass: 'text-gray-700' },
             
             // IMPRESIONES COLOR MEDIO
-            { id: 2, name: 'Copia / Impresión Color (Carta)', usd: 0.25, icon: <FileText className="text-blue-500" size={20} />, category: 'Impresiones (Papel Normal)' },
-            { id: 21, name: 'Copia / Impresión Color (Oficio)', usd: 0.30, icon: <FileText className="text-blue-500" size={20} />, category: 'Impresiones (Papel Normal)' },
+            { id: 2, name: 'Copia / Impresión Color (Carta)', usd: 0.25, icon: 'file-text', category: 'Impresiones (Papel Normal)', iconClass: 'text-blue-500' },
+            { id: 21, name: 'Copia / Impresión Color (Oficio)', usd: 0.30, icon: 'file-text', category: 'Impresiones (Papel Normal)', iconClass: 'text-blue-500' },
             
             // IMPRESIONES FULL COLOR
-            { id: 4, name: 'Impresión Color Full (Carta)', usd: 0.50, icon: <Layers className="text-blue-600" size={20} />, category: 'Impresiones (Papel Normal)' },
-            { id: 22, name: 'Impresión Color Full (Oficio)', usd: 0.60, icon: <Layers className="text-blue-600" size={20} />, category: 'Impresiones (Papel Normal)' },
+            { id: 4, name: 'Impresión Color Full (Carta)', usd: 0.50, icon: 'layers', category: 'Impresiones (Papel Normal)', iconClass: 'text-blue-600' },
+            { id: 22, name: 'Impresión Color Full (Oficio)', usd: 0.60, icon: 'layers', category: 'Impresiones (Papel Normal)', iconClass: 'text-blue-600' },
             
-            // IMPRESIONES PREMIUM
-            { id: 32, name: 'Impresión B/N (Cartulina Opalina)', usd: 0.50, icon: <FileText className="text-purple-600" size={20} />, category: 'Impresiones Premium' },
-            { id: 33, name: 'Impresión Color (Cartulina Opalina)', usd: 0.80, icon: <FileText className="text-purple-600" size={20} />, category: 'Impresiones Premium' },
-            { id: 34, name: 'Impresión Full Color (Opalina)', usd: 1.00, icon: <Layers className="text-purple-700" size={20} />, category: 'Impresiones Premium' },
-            { id: 5, name: 'Fondo Negro (Papel Fotográfico)', usd: 2.00, icon: <FileText className="text-gray-900" size={20} />, category: 'Impresiones Premium' },
-            { id: 14, name: 'Foto Tamaño Carta (Papel Foto)', usd: 2.00, icon: <Camera className="text-pink-600" size={20} />, category: 'Impresiones Premium' },
-            { id: 35, name: 'Foto Tamaño A4 (Papel Foto)', usd: 2.00, icon: <Camera className="text-pink-600" size={20} />, category: 'Impresiones Premium' },
-            { id: 6, name: '8 Fotos Tipo Carnet', usd: 3.00, icon: <Camera className="text-pink-700" size={20} />, category: 'Impresiones Premium' },
+            // IMPRESIONES PREMIUM (Agregado el Autoadhesivo Brillante)
+            { id: 48, name: 'Stickers / Etiquetas A4 (Autoadhesivo Brillante)', usd: 2.50, icon: 'image', category: 'Impresiones Premium', iconClass: 'text-amber-500' },
+            { id: 32, name: 'Impresión B/N (Cartulina Opalina)', usd: 0.50, icon: 'file-text', category: 'Impresiones Premium', iconClass: 'text-purple-600' },
+            { id: 33, name: 'Impresión Color (Cartulina Opalina)', usd: 0.80, icon: 'file-text', category: 'Impresiones Premium', iconClass: 'text-purple-600' },
+            { id: 34, name: 'Impresión Full Color (Opalina)', usd: 1.00, icon: 'layers', category: 'Impresiones Premium', iconClass: 'text-purple-700' },
+            { id: 5, name: 'Fondo Negro (Papel Fotográfico)', usd: 2.00, icon: 'file-text', category: 'Impresiones Premium', iconClass: 'text-gray-900' },
+            { id: 14, name: 'Foto Tamaño Carta (Papel Foto)', usd: 2.00, icon: 'camera', category: 'Impresiones Premium', iconClass: 'text-pink-600' },
+            { id: 35, name: 'Foto Tamaño A4 (Papel Foto)', usd: 2.00, icon: 'camera', category: 'Impresiones Premium', iconClass: 'text-pink-600' },
+            { id: 6, name: '8 Fotos Tipo Carnet', usd: 3.00, icon: 'camera', category: 'Impresiones Premium', iconClass: 'text-pink-700' },
             
-            // TRÁMITES EN LÍNEA
-            { id: 44, name: 'Trámites Básicos', description: 'Citas de Cédula (SAIME), Actualización de RIF, Antecedentes Penales y Planillas rápidas.', usd: 3.00, icon: <Globe className="text-blue-500" size={20} />, category: 'Trámites en Línea' },
-            { id: 46, name: 'Trámites Complejos', description: 'Citas de Pasaporte, Recuperación de claves/usuarios bloqueados, Creación de correos y Apostillas.', usd: 5.00, icon: <UserCheck className="text-blue-700" size={20} />, category: 'Trámites en Línea' },
+            // TRÁMITES EN LÍNEA (Con descripciones)
+            { id: 44, name: 'Trámites Básicos', description: 'Citas de Cédula (SAIME), Actualización de RIF, Antecedentes Penales y Planillas rápidas.', usd: 3.00, icon: 'globe', category: 'Trámites en Línea', iconClass: 'text-blue-500' },
+            { id: 46, name: 'Trámites Complejos', description: 'Citas de Pasaporte, Recuperación de claves/usuarios bloqueados, Creación de correos y Apostillas.', usd: 5.00, icon: 'user-check', category: 'Trámites en Línea', iconClass: 'text-blue-700' },
 
             // PLASTIFICADOS
-            { id: 7, name: 'Plastificado Carnet / Cédula', usd: 0.50, icon: <ShieldCheck size={20} />, category: 'Plastificados' },
-            { id: 8, name: 'Plastificado Carta', usd: 1.50, icon: <ShieldCheck size={20} />, category: 'Plastificados' },
-            { id: 9, name: 'Plastificado Oficio', usd: 2.00, icon: <ShieldCheck size={20} />, category: 'Plastificados' },
+            { id: 7, name: 'Plastificado Carnet / Cédula', usd: 0.50, icon: 'shield-check', category: 'Plastificados', iconClass: 'text-gray-700' },
+            { id: 8, name: 'Plastificado Carta', usd: 1.50, icon: 'shield-check', category: 'Plastificados', iconClass: 'text-gray-700' },
+            { id: 9, name: 'Plastificado Oficio', usd: 2.00, icon: 'shield-check', category: 'Plastificados', iconClass: 'text-gray-700' },
 
             // ENCUADERNACIONES
-            { id: 42, name: 'Encuadernado Básico (Hasta 50 hjs)', usd: 1.50, icon: <Book className="text-blue-600" size={20} />, category: 'Encuadernaciones' },
-            { id: 43, name: 'Encuadernado + Portada Plastificada', usd: 2.50, icon: <Book className="text-blue-800" size={20} />, category: 'Encuadernaciones' },
+            { id: 42, name: 'Encuadernado Básico (Hasta 50 hjs)', usd: 1.50, icon: 'book', category: 'Encuadernaciones', iconClass: 'text-blue-600' },
+            { id: 43, name: 'Encuadernado + Portada Plastificada', usd: 2.50, icon: 'book', category: 'Encuadernaciones', iconClass: 'text-blue-800' },
             
             // DISEÑO Y REDACCIÓN
-            { id: 36, name: 'Redacción Carta / Permiso (Solo diseño)', usd: 3.00, icon: <PenTool className="text-emerald-600" size={20} />, category: 'Diseño y Redacción' },
-            { id: 37, name: 'Actualizar CV (Solo diseño)', usd: 5.00, icon: <LayoutTemplate className="text-emerald-600" size={20} />, category: 'Diseño y Redacción' },
-            { id: 38, name: 'Creación CV desde cero (Solo diseño)', usd: 10.00, icon: <LayoutTemplate className="text-emerald-700" size={20} />, category: 'Diseño y Redacción' },
-            { id: 39, name: 'Diseño Post / Historia (Solo diseño)', usd: 5.00, icon: <Palette className="text-emerald-600" size={20} />, category: 'Diseño y Redacción' },
-            { id: 40, name: 'Diseño Básico Tarjeta/Volante', usd: 8.00, icon: <Palette className="text-emerald-700" size={20} />, category: 'Diseño y Redacción' },
+            { id: 36, name: 'Redacción Carta / Permiso (Solo diseño)', usd: 3.00, icon: 'pen-tool', category: 'Diseño y Redacción', iconClass: 'text-emerald-600' },
+            { id: 37, name: 'Actualizar CV (Solo diseño)', usd: 5.00, icon: 'layout-template', category: 'Diseño y Redacción', iconClass: 'text-emerald-600' },
+            { id: 38, name: 'Creación CV desde cero (Solo diseño)', usd: 10.00, icon: 'layout-template', category: 'Diseño y Redacción', iconClass: 'text-emerald-700' },
+            { id: 39, name: 'Diseño Post / Historia (Solo diseño)', usd: 5.00, icon: 'palette', category: 'Diseño y Redacción', iconClass: 'text-emerald-600' },
+            { id: 40, name: 'Diseño Básico Tarjeta/Volante', usd: 8.00, icon: 'palette', category: 'Diseño y Redacción', iconClass: 'text-emerald-700' },
 
             // SOPORTE TÉCNICO
-            { id: 25, name: 'Formateo Básico (Sin respaldo)', usd: 15.00, icon: <Monitor className="text-orange-500" size={20} />, category: 'Soporte Técnico' },
-            { id: 26, name: 'Formateo Completo (Con respaldo)', usd: 25.00, icon: <Monitor className="text-orange-600" size={20} />, category: 'Soporte Técnico' },
-            { id: 10, name: 'Recuperación Datos (Hasta 32GB)', usd: 5.00, icon: <HardDrive className="text-orange-400" size={20} />, category: 'Soporte Técnico' },
-            { id: 12, name: 'Recuperación Datos (Disco Duro)', usd: 15.00, icon: <HardDrive className="text-orange-600" size={20} />, category: 'Soporte Técnico' },
-            { id: 27, name: 'Optimización / PC Lenta', usd: 10.00, icon: <Settings className="text-gray-600" size={20} />, category: 'Soporte Técnico' },
-            { id: 28, name: 'Limpieza de Virus + Antivirus', usd: 10.00, icon: <ShieldCheck className="text-red-500" size={20} />, category: 'Soporte Técnico' },
-            { id: 29, name: 'Instalación Programas (Office/Diseño)', usd: 5.00, icon: <Wrench className="text-gray-700" size={20} />, category: 'Soporte Técnico' },
-            { id: 30, name: 'Configuración Impresora / Drivers', usd: 5.00, icon: <Printer className="text-gray-600" size={20} />, category: 'Soporte Técnico' },
-            { id: 23, name: 'Activación Windows / Licencias', usd: 5.00, icon: <Settings className="text-gray-500" size={20} />, category: 'Soporte Técnico' },
-            { id: 31, name: 'Revisión / Otro problema Software', usd: 5.00, icon: <Wrench className="text-gray-400" size={20} />, category: 'Soporte Técnico' },
+            { id: 25, name: 'Formateo Básico (Sin respaldo)', usd: 15.00, icon: 'monitor', category: 'Soporte Técnico', iconClass: 'text-orange-500' },
+            { id: 26, name: 'Formateo Completo (Con respaldo)', usd: 25.00, icon: 'monitor', category: 'Soporte Técnico', iconClass: 'text-orange-600' },
+            { id: 10, name: 'Recuperación Datos (Hasta 32GB)', usd: 5.00, icon: 'hard-drive', category: 'Soporte Técnico', iconClass: 'text-orange-400' },
+            { id: 12, name: 'Recuperación Datos (Disco Duro)', usd: 15.00, icon: 'hard-drive', category: 'Soporte Técnico', iconClass: 'text-orange-600' },
+            { id: 27, name: 'Optimización / PC Lenta', usd: 10.00, icon: 'settings', category: 'Soporte Técnico', iconClass: 'text-gray-600' },
+            { id: 28, name: 'Limpieza de Virus + Antivirus', usd: 10.00, icon: 'shield-check', category: 'Soporte Técnico', iconClass: 'text-red-500' },
+            { id: 29, name: 'Instalación Programas (Office/Diseño)', usd: 5.00, icon: 'wrench', category: 'Soporte Técnico', iconClass: 'text-gray-700' },
+            { id: 30, name: 'Configuración Impresora / Drivers', usd: 5.00, icon: 'printer', category: 'Soporte Técnico', iconClass: 'text-gray-600' },
+            { id: 23, name: 'Activación Windows / Licencias', usd: 5.00, icon: 'settings', category: 'Soporte Técnico', iconClass: 'text-gray-500' },
+            { id: 31, name: 'Revisión / Otro problema Software', usd: 5.00, icon: 'wrench', category: 'Soporte Técnico', iconClass: 'text-gray-400' },
 
             // DESCARGAS
-            { id: 15, name: 'Descarga de Canción (MP3)', usd: 0.10, icon: <Music className="text-indigo-500" size={20} />, category: 'Descargas Digitales' },
-            { id: 16, name: 'Descarga de Video (MP4)', usd: 0.20, icon: <Video className="text-indigo-500" size={20} />, category: 'Descargas Digitales' },
-            { id: 17, name: 'Llenado de Memoria (Por 1 GB)', usd: 1.00, icon: <Database className="text-indigo-600" size={20} />, category: 'Descargas Digitales' },
+            { id: 15, name: 'Descarga de Canción (MP3)', usd: 0.10, icon: 'music', category: 'Descargas Digitales', iconClass: 'text-indigo-500' },
+            { id: 16, name: 'Descarga de Video (MP4)', usd: 0.20, icon: 'video', category: 'Descargas Digitales', iconClass: 'text-indigo-500' },
+            { id: 17, name: 'Llenado de Memoria (Por 1 GB)', usd: 1.00, icon: 'database', category: 'Descargas Digitales', iconClass: 'text-indigo-600' },
 
-            // PAPELERÍA Y ARTÍCULOS
-            { id: 18, name: 'Funda Protectora (Unidad)', usd: 0.30, icon: <Package className="text-teal-500" size={20} />, category: 'Papelería y Artículos' },
-            { id: 19, name: 'Funda Protectora (Promo 2x)', usd: 0.50, icon: <Package className="text-teal-600" size={20} />, category: 'Papelería y Artículos' },
-            { id: 41, name: 'Carpeta Marrón + Gancho', usd: 1.00, icon: <Folder className="text-amber-700" size={20} />, category: 'Papelería y Artículos' },
+            // PAPELERÍA Y ARTÍCULOS (Agregadas nuevas compras)
+            { id: 18, name: 'Funda Protectora (Unidad)', usd: 0.30, icon: 'package', category: 'Papelería y Artículos', iconClass: 'text-teal-500' },
+            { id: 19, name: 'Funda Protectora (Promo 2x)', usd: 0.50, icon: 'package', category: 'Papelería y Artículos', iconClass: 'text-teal-600' },
+            { id: 41, name: 'Carpeta Marrón (Ocultar si hay específicas)', usd: 1.00, icon: 'folder', category: 'Papelería y Artículos', iconClass: 'text-amber-700', hide: true }, // Ocultamos la genérica
+            { id: 49, name: 'Carpeta Marrón (Oficio)', usd: 1.00, icon: 'folder', category: 'Papelería y Artículos', iconClass: 'text-amber-800' },
+            { id: 50, name: 'Sobre Manila (Carta)', usd: 0.50, icon: 'mail', category: 'Papelería y Artículos', iconClass: 'text-amber-500' },
+            { id: 51, name: 'Sobre Manila (Oficio)', usd: 0.60, icon: 'mail', category: 'Papelería y Artículos', iconClass: 'text-amber-600' },
           ]);
 
           const calculateBs = (usd) => {
@@ -162,6 +175,13 @@
               minimumFractionDigits: 2,
             }).format(value);
           };
+
+          // Re-inicializar iconos si cambian los servicios filtrados (poco probable aquí, pero buena práctica)
+          useEffect(() => {
+             if (window.lucide) {
+                 window.lucide.createIcons();
+             }
+          });
 
           return (
             <div className="min-h-screen bg-gray-100 p-4 md:p-8 font-sans">
@@ -203,8 +223,8 @@
                 <div className="bg-white rounded-xl shadow-md p-6 border-t-4 border-brand-blue">
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                     <div className="flex items-center gap-4">
-                      <div className="bg-brand-blue/10 p-3 rounded-full">
-                        <Calculator className="text-brand-blue" />
+                      <div className="bg-brand-blue/10 p-3 rounded-full text-brand-blue">
+                        <i data-lucide="calculator"></i>
                       </div>
                       <div>
                         <h2 className="text-xl font-black text-gray-800 uppercase tracking-tight">Centro Fotocopiado SS</h2>
@@ -217,7 +237,7 @@
                         <span className="text-[10px] font-bold text-gray-400 uppercase ml-1 mb-1 flex items-center gap-2">
                           Tasa del día
                           <button onClick={fetchBCVRate} title="Actualizar desde BCV" className="text-brand-blue hover:text-blue-800 transition-colors">
-                             <RefreshCw size={12} className={isFetchingRate ? "animate-spin" : ""} />
+                             <i data-lucide="refresh-cw" width="12" height="12" className={isFetchingRate ? "animate-spin" : ""}></i>
                           </button>
                         </span>
                         <div className="relative">
@@ -230,7 +250,7 @@
                         </div>
                       </div>
                       <button onClick={handlePrint} className="flex items-center gap-2 bg-brand-blue hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-lg shadow-lg active:scale-95 transition-all">
-                        <Printer size={20} />
+                        <i data-lucide="printer" width="20" height="20"></i>
                         IMPRIMIR
                       </button>
                     </div>
@@ -252,6 +272,7 @@
                         <img 
                           src={localLogoUrl} 
                           alt="Logo Centro Fotocopiado SS" 
+                          onError={(e) => { e.target.style.display = 'none'; console.error("Error al cargar el logo. Verifica que 'PRINTER CENTER (1).png' esté en la misma carpeta."); }}
                           className="h-32 object-contain drop-shadow-2xl bg-white p-3 rounded-2xl"
                         />
                     </div>
@@ -277,7 +298,10 @@
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                     {['Impresiones (Papel Normal)', 'Impresiones Premium', 'Trámites en Línea', 'Diseño y Redacción', 'Soporte Técnico', 'Plastificados', 'Encuadernaciones', 'Descargas Digitales', 'Papelería y Artículos'].map((cat) => {
                       const isFullWidth = ['Soporte Técnico', 'Diseño y Redacción', 'Descargas Digitales', 'Papelería y Artículos'].includes(cat);
+                      const catServices = services.filter(s => s.category === cat && !s.hide);
                       
+                      if (catServices.length === 0) return null;
+
                       return (
                         <div key={cat} className={isFullWidth ? 'md:col-span-2' : ''}>
                           <div className="flex items-center gap-3 mb-6">
@@ -288,11 +312,11 @@
                           </div>
                           
                           <div className={`grid grid-cols-1 ${isFullWidth ? 'md:grid-cols-2 gap-x-8' : ''} gap-3`}>
-                            {services.filter(s => s.category === cat).map((service) => (
+                            {catServices.map((service) => (
                               <div key={service.id} className="flex items-center justify-between p-4 rounded-2xl border-2 border-gray-100 hover:border-brand-blue/30 hover:bg-blue-50/30 transition-all">
                                 <div className="flex items-center gap-5">
-                                    <div className="bg-gray-100 p-3.5 rounded-xl text-gray-700">
-                                      {service.icon}
+                                    <div className={`bg-gray-100 p-3.5 rounded-xl ${service.iconClass || 'text-gray-700'}`}>
+                                      <i data-lucide={service.icon} width="20" height="20"></i>
                                     </div>
                                     <div>
                                       <p className="font-black text-gray-900 text-lg leading-tight mb-1">{service.name}</p>
@@ -324,12 +348,12 @@
                   <div className="flex flex-col md:flex-row justify-between items-center gap-12">
                     <div className="text-center md:text-left flex-1">
                       <h4 className="text-2xl font-black uppercase mb-6 tracking-tight flex items-center justify-center md:justify-start gap-3">
-                        <MessageCircle className="text-green-400" size={32} />
+                        <i data-lucide="message-circle" width="32" height="32" className="text-green-400"></i>
                         ¡Contáctanos por WhatsApp!
                       </h4>
                       <div className="space-y-4">
                         <a href={contactInfo.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-4 bg-white/10 hover:bg-white/20 p-4 px-6 rounded-2xl border border-white/10 transition-all cursor-pointer no-underline group">
-                          <Smartphone className="text-brand-blue group-hover:scale-110 transition-transform" size={28} />
+                          <i data-lucide="smartphone" width="28" height="28" className="text-brand-blue group-hover:scale-110 transition-transform"></i>
                           <div className="text-left">
                             <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Escríbenos al</p>
                             <p className="text-2xl font-black tracking-tighter">{contactInfo.phone}</p>
@@ -342,10 +366,10 @@
                     {/* QR AREA FIJO */}
                     <div className="bg-white p-5 rounded-3xl shadow-2xl flex flex-col items-center gap-3">
                       <div className="bg-white p-3 rounded-2xl border-4 border-gray-50 flex items-center justify-center relative overflow-hidden">
-                        {/* Se carga la imagen local o de Netlify EXCLUSIVAMENTE */}
                         <img 
                           src={localQrUrl} 
-                          alt="WhatsApp QR Code Centro Fotocopiado SS" 
+                          alt="WhatsApp QR Code Centro Fotocopiado SS"
+                          onError={(e) => { e.target.style.display = 'none'; console.error("Error al cargar el QR. Verifica que esté en la misma carpeta."); }} 
                           className="w-32 h-32 md:w-40 md:h-40 object-cover"
                         />
                       </div>
